@@ -71,4 +71,19 @@ router.put('/:id', validateId, async (req, res, next) => {
   };
 });
 
+router.delete('/:id', validateId, async (req, res, next) => {
+  try {
+    await db('cars').where('id', req.params.id).del()
+    res.status(200).json({
+      message: 'One car has been deleted.'
+    })
+  } catch (err) {
+    res.status(500).json({
+      err: err,
+      errorMessage: 'Failed to remove one record.'
+    })
+    next(err)
+  };
+})
+
 module.exports = router;

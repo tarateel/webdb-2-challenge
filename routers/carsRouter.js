@@ -17,5 +17,17 @@ router.get("/", async (req, res, next) => {
   };
 });
 
+router.get('/:id', validateId, async (req, res, next) => {
+  try {
+    res.status(200).json(await db('cars').first())
+  } catch(err) {
+    res.status(500).json({
+      err: err,
+      errorMessage: 'The car information could not be retrieved.'
+    })
+    next(err)
+  };
+});
+
 
 module.exports = router;

@@ -50,4 +50,25 @@ router.post('/', async (req, res, next) => {
   };
 });
 
+router.put('/:id', validateId, async (req, res, next) => {
+  try {
+    const payload = {
+      vin: req.body.VIN,
+      make: req.body.make,
+      model: req.body.model,
+      mileage: req.body.mileage,
+      transmission: req.body.transmission,
+      title: req.body.title
+    }
+    await db('cars').where('id', req.params.id).update(payload)
+    res.status(200).json(await db('cars').where('id', req.params.id).first())
+  } catch (err) {
+    res.status(500).json({
+      err: err,
+      errorMessage: 'Failed to update car information.'
+    })
+    next(err)
+  };
+});
+
 module.exports = router;
